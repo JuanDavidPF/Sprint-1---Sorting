@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Algoritmo de sorting</title>
+  </head>
+  <body>
+    <label for="avatar">Escoge una base de datos:</label>
+    <input type="file" id="database" name="avatar" accept=".csv" />
+
+    <div>
+      <label for="filtro">Escoge un tipo de ordenamiento</label>
+      <select name="filtro" class="filter">
+        <option name="1">Valor A</option>
+        <option name="2">Valor B</option>
+      </select>
+      <select name="orden" class="order">
+        <option name="1">Ascendente</option>
+        <option name="2">Descendente</option>
+      </select>
+    </div>
+
+    <div id="usersList"></div>
+
+    <input type="button" value="SORT!" onclick="Sort()" />
+    <input type="button" value="EXPORTAR CSV" onclick="Export()" />
+
+    <script src="./scripts/PapaParse-5.0.2/papaparse.js"></script>
+    <script src="./scripts/sort.js"></script>
+  </body>
+</html>
