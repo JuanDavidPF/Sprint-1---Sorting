@@ -1,24 +1,30 @@
+
+body>div{
+
+   font-family: Arial, Helvetica, sans-serif;
+   margin-top: 15px;
+}
+
 .users{
   
     border-style: solid;
     border-width: 3px;
     display: flex;
+    width: auto;
     padding: 5px;
     margin-bottom: 5px;
  }
 
  .users>div{ 
-   
+   width: 50px; 
       border-right: dotted;
       margin-left: 25px;
+   
  }
-
 
  .users>div:nth-child(1){
      width: 200px;      
   }
 
-  .users>div:nth-child(2),   .users>div:nth-child(3){
-    width: 50px; 
- }
+
 
