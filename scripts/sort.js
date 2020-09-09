@@ -36,12 +36,13 @@ function Sort() {
     storedDatabase.sort(function (a, b) {
       let valor = sortParameter + 1;
 
+      console.log(a[valor]);
       //fixed local machine puntuation
-      a = parseFloat(a[valor].replace(",", "."));
-      b = parseFloat(b[valor].replace(",", "."));
+      a = parseFloat(a[valor]);
+      b = parseFloat(b[valor]);
 
-      if (sortOrder == 1) return b - a;
-      else if (sortOrder == 0) return a - b;
+      if (sortOrder == 0) return a - b;
+      else if (sortOrder == 1) return b - a;
     });
 
     RestartVisualDatabase(storedDatabase);
@@ -79,15 +80,16 @@ function CreateVisualDatabase(database) {
       option2.value = NameContent.textContent.toLowerCase();
       option2.text = NameContent.textContent;
       sujeto2.add(option2);
-    } else {
-      //crear filtros si no existen
-      if (filter.length == 0) {
-        for (let i = 1; i < userData.length; i++) {
-          let option = document.createElement("option");
-          option.value = userData[i].toLowerCase();
-          option.text = "Valor " + userData[i];
-          filter.add(option);
-        }
+    }
+
+    //crear filtros si no existen
+    if (filter.length == 0) {
+      for (let i = 1; i < userData.length; i++) {
+        let option = document.createElement("option");
+        option.value = userData[i].toLowerCase();
+        option.text = "Valor " + userData[i];
+
+        filter.add(option);
       }
     }
 
@@ -113,7 +115,6 @@ function DeleateVisualDatabase() {
 
 function GetFilterInputs() {
   sortParameter = filter.options.selectedIndex;
-
   sortOrder = orden.options.selectedIndex;
 }
 
@@ -140,8 +141,8 @@ function Compare() {
   let productoPunto = 0;
 
   for (let i = 0; i < user1Data.length; i++) {
-    a = parseFloat(user1Data[i].replace(",", "."));
-    b = parseFloat(user2Data[i].replace(",", "."));
+    a = parseFloat(user1Data[i]);
+    b = parseFloat(user2Data[i]);
     productoPunto += a * b;
   }
 
@@ -150,8 +151,8 @@ function Compare() {
   let magnitudB = 0;
 
   for (let i = 0; i < user1Data.length; i++) {
-    a = parseFloat(user1Data[i].replace(",", "."));
-    b = parseFloat(user2Data[i].replace(",", "."));
+    a = parseFloat(user1Data[i]);
+    b = parseFloat(user2Data[i]);
 
     magnitudA += Math.pow(a, 2);
     magnitudB += Math.pow(b, 2);
