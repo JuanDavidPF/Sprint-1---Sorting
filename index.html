@@ -7,13 +7,18 @@
     <title>Algoritmo de sorting</title>
   </head>
   <body>
+    <!---------------------------------------->
+
     <div>
-      <label for="avatar">Escoge una base de datos:</label>
+      <label for="avatar">1. Escoge una base de datos:</label>
       <input type="file" id="database" name="avatar" accept=".csv" />
     </div>
+
+    <!---------------------------------------->
+
     <div>
-      <label for="filtro">Escoge un tipo de ordenamiento</label>
-      <select name="filtro" class="filter"> </select>
+      <label for="filtro">2. Escoge un tipo de ordenamiento</label>
+      <select name="filtro" class="filter"></select>
       <select name="orden" class="order">
         <option name="1">Ascendente</option>
         <option name="2">Descendente</option>
@@ -21,13 +26,28 @@
       <input type="button" value="Ordenar" onclick="Sort()" />
     </div>
 
-    <div>
-      <label for="compare">Compara dos personas</label>
-      <select name="sujeto1" class="sujeto1"> </select>
+    <!---------------------------------------->
 
-      <select name="sujeto2" class="sujeto2"> </select>
+    <div>
+      <label for="compare">3. Compara dos personas</label>
+      <select name="sujeto1" class="sujeto1"></select>
+
+      <select name="sujeto2" class="sujeto2"></select>
       <input type="button" value="Comparar" onclick="Compare()" />
     </div>
+
+    <!---------------------------------------->
+
+    <div>
+      <label for="sujeto1">4. Armale un parche a: </label>
+      <select name="sujetoParche" class="sujetoParche"></select>
+      <label for="compare"> de</label>
+      <input type="text" placeholder="Tamaño del parche" id="parcheSize" />
+      <label for="compare"> personas</label>
+      <input type="button" value="Armar" onclick="Parchar()" />
+    </div>
+
+    <!---------------------------------------->
 
     <div id="usersList"></div>
 
