@@ -7,6 +7,8 @@ let sujetoParche = document.querySelector(".sujetoParche");
 let parcheSize = document.querySelector("#parcheSize");
 let filter = document.querySelector(".filter");
 let orden = document.querySelector(".order");
+let content = document.querySelector(".content");
+let modal = document.querySelector(".modal");
 
 var sortOrder = "";
 var sortParameter = "";
@@ -14,7 +16,9 @@ var compareUser1 = "";
 var compareUser2 = "";
 var parcheLeader = "";
 let similitudCoseno = 0;
-let elParche = [];
+let liderDelParche;
+let parche = [];
+let arrayOriginalSize;
 
 const CSVField = document.getElementById("database");
 CSVField.addEventListener("change", loadDataBase, false);
@@ -26,6 +30,8 @@ function loadDataBase() {
   Papa.parse(file, {
     complete: function (results) {
       storedDatabase = results.data;
+      arrayOriginalSize = storedDatabase[0].length;
+
       RestartVisualDatabase(storedDatabase);
     },
   });
@@ -39,7 +45,6 @@ function Sort() {
     storedDatabase.sort(function (a, b) {
       let valor = sortParameter + 1;
 
-      console.log(a[valor]);
       //fixed local machine puntuation
       a = parseFloat(a[valor]);
       b = parseFloat(b[valor]);
@@ -49,7 +54,7 @@ function Sort() {
     });
 
     RestartVisualDatabase(storedDatabase);
-  }
+  } else alert("No se ha subido una base de datos");
 }
 
 function RestartVisualDatabase(database) {
@@ -119,6 +124,7 @@ function DeleateVisualDatabase() {
 
   sujeto1.length = 0;
   sujeto2.length = 0;
+  sujetoParche.length = 0;
 }
 
 function GetFilterInputs() {
@@ -127,31 +133,33 @@ function GetFilterInputs() {
 }
 
 function Compare() {
-  compareUser1 = sujeto1.options.selectedIndex;
-  compareUser2 = sujeto2.options.selectedIndex;
+  if (storedDatabase) {
+    compareUser1 = sujeto1.options.selectedIndex;
+    compareUser2 = sujeto2.options.selectedIndex;
 
-  user1Data = [];
-  user2Data = [];
+    user1Data = [];
+    user2Data = [];
 
-  //recupera cada valor por separado
-  for (let i = 1; i < storedDatabase[compareUser1 + 1].length; i++) {
-    user1Data[i - 1] = storedDatabase[compareUser1 + 1][i];
-  }
+    //recupera cada valor por separado
+    for (let i = 1; i < storedDatabase[compareUser1 + 1].length; i++) {
+      user1Data[i - 1] = storedDatabase[compareUser1 + 1][i];
+    }
 
-  for (let i = 1; i < storedDatabase[compareUser2 + 1].length; i++) {
-    user2Data[i - 1] = storedDatabase[compareUser2 + 1][i];
-  }
+    for (let i = 1; i < storedDatabase[compareUser2 + 1].length; i++) {
+      user2Data[i - 1] = storedDatabase[compareUser2 + 1][i];
+    }
 
-  similitudCoseno = Semejanza(user1Data, user2Data);
+    similitudCoseno = Semejanza(user1Data, user2Data);
 
-  alert(
-    "El índice de similitud entre " +
-      storedDatabase[compareUser1 + 1][0] +
-      " y " +
-      storedDatabase[compareUser2 + 1][0] +
-      " es de: " +
-      similitudCoseno.toFixed(2)
-  );
+    alert(
+      "El índice de similitud entre " +
+        storedDatabase[compareUser1 + 1][0] +
+        " y " +
+        storedDatabase[compareUser2 + 1][0] +
+        " es de: " +
+        similitudCoseno.toFixed(2)
+    );
+  } else alert("No se ha subido una base de datos");
 }
 
 function Semejanza(sujeto1Data, sujeto2Data) {
@@ -188,41 +196,69 @@ function Semejanza(sujeto1Data, sujeto2Data) {
   return similitudCoseno;
 }
 
-function Parchar() {
-  leaderIndex = sujetoParche.options.selectedIndex;
-  parcheSize.innerHTML = "hola";
-  leaderData = [];
-  otherData = [];
-  semejanzaArray = [];
-  size = parseInt(parcheSize.value);
-
-  //recupera el valor del lider
-  for (let i = 1; i < storedDatabase[leaderIndex + 1].length; i++) {
-    leaderData[i - 1] = storedDatabase[leaderIndex + 1][i];
+document.addEventListener("click", function (v) {
+  if (v.target == modal) {
+    modal.classList.remove("activated");
+    content.classList.remove("hidden");
+    setTimeout(function () {
+      modal.style.display = "none";
+    }, 300);
   }
+});
 
-  for (
-    let otherIndex = 0;
-    otherIndex < sujetoParche.options.length;
-    otherIndex++
-  ) {
-    //recupera el valor de todos l
-    for (let i = 1; i < storedDatabase[otherIndex + 1].length; i++) {
-      otherData[i - 1] = storedDatabase[otherIndex + 1][i];
+function Parchar() {
+  if (storedDatabase) {
+    content.classList.add("hidden");
+    modal.style.display = "flex";
+
+    setTimeout(function () {
+      modal.classList.add("activated");
+    }, 1);
+
+    leaderIndex = sujetoParche.options.selectedIndex;
+    parcheSize.innerHTML = "hola";
+    leaderData = [];
+    let otherData = [];
+    parche = [];
+    semejanza = [];
+    size = parseInt(parcheSize.value);
+    databaseReference = storedDatabase.slice(0);
+    databaseReference.shift();
+
+    //recupera el valor del lider
+    for (let i = 0; i < databaseReference[leaderIndex].length; i++) {
+      leaderData.push(databaseReference[leaderIndex][i]);
     }
+    leaderData.shift();
 
-    let semejanza = Semejanza(leaderData, otherData);
-    semejanzaArray.push(semejanza);
-    ///////////////////////////
-    ///////////////////////////
-  } //for of everyone in the list
+    //recupera el valor de todos l
+    for (otherIndex = 0; otherIndex < databaseReference.length; otherIndex++) {
+      for (let i = 0; i < databaseReference[leaderIndex].length; i++) {
+        otherData.push(databaseReference[otherIndex][i]);
+      }
+      otherData.shift();
+      semejanza = Semejanza(leaderData, otherData);
+      databaseReference[otherIndex][arrayOriginalSize] = semejanza;
+      if (otherIndex == leaderIndex) {
+        liderDelParche = databaseReference[otherIndex];
+        databaseReference[otherIndex][arrayOriginalSize] = 0;
+      }
+      parche.push(databaseReference[otherIndex]);
 
-  semejanzaArray[leaderIndex] = 0;
-  semejanzaArray.sort(function (a, b) {
-    return b - a;
-  });
+      otherData = [];
+    } //for of everyone in the list
 
-  console.log(semejanzaArray);
+    parche.sort(function (a, b) {
+      a = parseFloat(a[a.length - 1]);
+      b = parseFloat(b[b.length - 1]);
+      return b - a;
+    });
+
+    parche.pop();
+
+    parche = parche.slice(0, size);
+    Represent();
+  } else alert("No se ha subido una base de datos");
 } //closes parchar
 
 function Export() {
