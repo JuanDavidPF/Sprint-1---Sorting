@@ -19,6 +19,9 @@ let similitudCoseno = 0;
 let liderDelParche;
 let parche = [];
 let arrayOriginalSize;
+let mayorSimilitud;
+let menorSimilitud;
+let parcheSimilitud = [];
 
 const CSVField = document.getElementById("database");
 CSVField.addEventListener("change", loadDataBase, false);
@@ -255,6 +258,13 @@ function Parchar() {
     });
 
     parche.pop();
+    parcheSimilitud.length = 0;
+    for (let i = 0; i < parche.length; i++) {
+      parcheSimilitud.push(parche[i][parche[i].length - 1]);
+    }
+
+    mayorSimilitud = Math.max.apply(Math, parcheSimilitud);
+    menorSimilitud = Math.min.apply(Math, parcheSimilitud);
 
     parche = parche.slice(0, size);
     Represent();
