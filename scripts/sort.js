@@ -9,6 +9,8 @@ let filter = document.querySelector(".filter");
 let orden = document.querySelector(".order");
 let content = document.querySelector(".content");
 let modal = document.querySelector(".modal");
+let rangeContainer = document.querySelector(".sliderContainer");
+let sliderPrefab = document.querySelector(".slider");
 
 var sortOrder = "";
 var sortParameter = "";
@@ -21,6 +23,8 @@ let parche = [];
 let arrayOriginalSize;
 let mayorSimilitud;
 let menorSimilitud;
+let importanceLevels = [];
+let importanceLevelsRange = [];
 let parcheSimilitud = [];
 
 const CSVField = document.getElementById("database");
@@ -62,7 +66,9 @@ function Sort() {
 
 function RestartVisualDatabase(database) {
   DeleateVisualDatabase();
+  DeleteImportanceLevels();
   CreateVisualDatabase(database);
+  CreateImportanceLevels(database);
 }
 
 function CreateVisualDatabase(database) {
@@ -130,6 +136,31 @@ function DeleateVisualDatabase() {
   sujetoParche.length = 0;
 }
 
+function CreateImportanceLevels(database) {
+  for (let i = 1; i < database[0].length; i++) {
+    let importanceLevel = sliderPrefab.cloneNode(true);
+    importanceLevel.children[0].innerText = database[0][i];
+    rangeContainer.appendChild(importanceLevel);
+    importanceLevelsRange[i - 1] = importanceLevel;
+    importanceLevels[i - 1] = importanceLevel.children[1].value / 100;
+  }
+  sliderPrefab.style.display = "none";
+}
+
+function DeleteImportanceLevels() {
+  sliderPrefab.style.display = "block";
+  for (let i = 0; i < rangeContainer.length; i++) {
+    rangeContainer.removeChild(rangeContainer[i]);
+  }
+}
+
+function GetImportanceLevels() {
+  importanceLevels = [];
+  for (let i = 0; i < importanceLevelsRange.length; i++) {
+    importanceLevels[i] = importanceLevelsRange[i].children[1].value / 100;
+    importanceLevels[i] = map(importanceLevels[i], 0, 1, 1, 0);
+  }
+}
 function GetFilterInputs() {
   sortParameter = filter.options.selectedIndex;
   sortOrder = orden.options.selectedIndex;
@@ -163,6 +194,40 @@ function Compare() {
         similitudCoseno.toFixed(2)
     );
   } else alert("No se ha subido una base de datos");
+}
+
+function SemejanzaPonderada(sujeto1Data, sujeto2Data) {
+  //////////////CALCULO DE LA SEMEJANZA/////////////
+
+  // Paso 1: calculo del producto punto
+
+  let productoPunto = 0;
+
+  for (let i = 0; i < arrayOriginalSize - 1; i++) {
+    a = parseFloat(sujeto1Data[i]);
+    b = parseFloat(sujeto2Data[i]);
+    productoPunto += a * b * importanceLevels[i];
+  }
+
+  // Paso 2: calculo de la magnitud
+  let magnitudA = 0;
+  let magnitudB = 0;
+
+  for (let i = 0; i < sujeto1Data.length; i++) {
+    a = parseFloat(sujeto1Data[i]);
+    b = parseFloat(sujeto2Data[i]);
+
+    magnitudA += Math.pow(a, 2);
+    magnitudB += Math.pow(b, 2);
+  }
+
+  magnitudA = Math.sqrt(magnitudA);
+  magnitudB = Math.sqrt(magnitudB);
+
+  // Paso 3: calculo de la similitud del coseno
+
+  similitudCoseno = productoPunto / (magnitudA * magnitudB);
+  return similitudCoseno;
 }
 
 function Semejanza(sujeto1Data, sujeto2Data) {
@@ -211,6 +276,7 @@ document.addEventListener("click", function (v) {
 
 function Parchar() {
   if (storedDatabase) {
+    GetImportanceLevels();
     content.classList.add("hidden");
     modal.style.display = "flex";
 
@@ -240,7 +306,7 @@ function Parchar() {
         otherData.push(databaseReference[otherIndex][i]);
       }
       otherData.shift();
-      semejanza = Semejanza(leaderData, otherData);
+      semejanza = SemejanzaPonderada(leaderData, otherData);
       databaseReference[otherIndex][arrayOriginalSize] = semejanza;
       if (otherIndex == leaderIndex) {
         liderDelParche = databaseReference[otherIndex];

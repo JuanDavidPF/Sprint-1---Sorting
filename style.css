@@ -96,6 +96,7 @@ select {
 }
 
 .modal {
+
    z-index: 1;
    background-color: rgb(0, 0, 0);
    display: none;
@@ -110,11 +111,19 @@ select {
 
 .modal.activated {
    opacity: 1;
+   
 }
-
+.modal label{
+   color: white;
+}
 #parche {
+  
    display: flex;
    align-items: center;
    height: fit-content;
    width: fit-content;
+}
+.sliderContainer{
+   display: flex;
+   flex-direction: column;
 }
