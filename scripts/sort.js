@@ -140,6 +140,7 @@ function CreateImportanceLevels(database) {
   for (let i = 1; i < database[0].length; i++) {
     let importanceLevel = sliderPrefab.cloneNode(true);
     importanceLevel.children[0].innerText = database[0][i];
+    importanceLevel.children[1].value = 0;
     rangeContainer.appendChild(importanceLevel);
     importanceLevelsRange[i - 1] = importanceLevel;
     importanceLevels[i - 1] = importanceLevel.children[1].value / 100;
@@ -158,7 +159,7 @@ function GetImportanceLevels() {
   importanceLevels = [];
   for (let i = 0; i < importanceLevelsRange.length; i++) {
     importanceLevels[i] = importanceLevelsRange[i].children[1].value / 100;
-    importanceLevels[i] = map(importanceLevels[i], 0, 1, 1, 0);
+    importanceLevels[i] = map(importanceLevels[i], 0, 1, 1, 0.1);
   }
 }
 function GetFilterInputs() {
