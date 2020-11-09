@@ -8,7 +8,8 @@
   </head>
 
   <body>
-    <!---------------------------------------->
+    <!--First three sprints 
+
     <div class="modal">
       <div id="parche"></div>
       <div class="sliderContainer">
@@ -16,18 +17,17 @@
           <label class="label">Hola</label>
           <input type="range" class="range" onclick="Parchar()" />
         </div>
-  
       </div>
     </div>
 
-    <!---------------------------------------->
+ 
     <div class="content">
       <div>
         <label for="avatar">1. Escoge una base de datos:</label>
         <input type="file" id="database" name="avatar" accept=".csv" />
       </div>
 
-      <!---------------------------------------->
+ 
 
       <div>
         <label for="filtro">2. Escoge un tipo de ordenamiento</label>
@@ -38,8 +38,7 @@
         </select>
         <input type="button" value="Ordenar" onclick="Sort()" />
       </div>
-
-      <!---------------------------------------->
+   
 
       <div>
         <label for="compare">3. Compara dos personas</label>
@@ -49,7 +48,6 @@
         <input type="button" value="Comparar" onclick="Compare()" />
       </div>
 
-      <!---------------------------------------->
 
       <div>
         <label for="sujeto1">4. Armale un parche a: </label>
@@ -59,8 +57,7 @@
         <label for="compare"> personas</label>
         <input type="button" value="Armar" onclick="Parchar()" />
       </div>
-
-      <!---------------------------------------->
+    
 
       <div id="usersList"></div>
 
@@ -70,5 +67,45 @@
     <script src="./scripts/sort.js"></script>
     <script src="./scripts/p5/p5.js"></script>
     <script src="./scripts/parche.js"></script>
+    -->
+
+    <!-- Recommendation System -->
+
+    <div class="content">
+      <div>
+        <label for="avatar">1. Escoge una base de datos:</label>
+        <input type="file" id="database" name="avatar" accept=".csv" />
+      </div>
+
+      <div>
+        <label for="avatar">2. Escoge una Algoritmo de recomendacion:</label>
+        <select name="typeOfCalculation" id="Algorithm">
+          <option name="Naive" value="Naive">Naive Average</option>
+          <option name="Least" value="Least">Least Misery</option>
+          <option name="Maximum" value="Maximum">Maximum Pleasure</option>
+          <option name="Media" value="Media">Media Satisfaction</option>
+          <option name="Payán" value="Payán">Método SuperHiperMegaPayán</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="avatar">3. Recomienda una playlist de</label>
+        <input type="number" placeholder="Cantidad" id="PlayListSize" />
+        <select name="typeOfCalculation" id="TypeOfCalculation">
+          <option value="songs">canciones</option>
+          <option value="minutes">minutos</option>
+        </select>
+        <button onclick="Recomendar()">Recomendar!</button>
+      </div>
+
+      <div id="usersList"></div>
+
+      <h1 class="recommendationText"></h1>
+    </div>
+
+    <!---------------->
+    <script src="./scripts/p5/p5.js"></script>
+    <script src="./scripts/PapaParse-5.0.2/papaparse.js"></script>
+    <script src="./scripts/Recommendation.js"></script>
   </body>
 </html>

@@ -7,7 +7,6 @@ let initials;
 function setup() {
   var myCanvas = createCanvas(900, 900);
   myCanvas.parent("parche");
-
   liderSize = 60;
   followSize = 20;
   liderY = height / 2;

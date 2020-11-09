@@ -214,7 +214,7 @@ function SemejanzaPonderada(sujeto1Data, sujeto2Data) {
   let magnitudA = 0;
   let magnitudB = 0;
 
-  for (let i = 0; i < sujeto1Data.length; i++) {
+  for (let i = 0; i < arrayOriginalSize - 1; i++) {
     a = parseFloat(sujeto1Data[i]);
     b = parseFloat(sujeto2Data[i]);
 
