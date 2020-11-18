@@ -1,6 +1,10 @@
 ///////////////////////////////////////////////////
 ///////////////////////////////////////////////////
 
+let OriginalProductsDatabase;
+let OriginalUsersDatabase;
+let mixed = false;
+
 let UsersDatabase;
 let UsersDatabaseOriginalSize;
 
@@ -37,6 +41,7 @@ function loadUsersDataBase() {
 
   Papa.parse(file, {
     complete: function (results) {
+      OriginalUsersDatabase = results.data;
       UsersDatabase = results.data;
       UsersDatabaseOriginalSize = UsersDatabase.length;
       CreateUserDatabase();
@@ -50,6 +55,7 @@ function loadProductsDataBase() {
 
   Papa.parse(file, {
     complete: function (results) {
+      OriginalProductsDatabase = results.data;
       ProductsDatabase = results.data;
       ProductsDatabaseOriginalSize = ProductsDatabase.length;
       CreateProductDatabase();
@@ -202,7 +208,13 @@ function Recomendar() {
           ArmarPizza(MediaSatisfactionMethod());
 
           break;
+
         case 4:
+          ArmarPizza(Binary());
+
+          break;
+
+        case 5:
           ArmarPizza(HiperMegaPayanMethod());
 
           break;
@@ -261,6 +273,17 @@ function MediaSatisfactionMethod() {
   return protoPersona;
 } //closes MediaSatisfactionMethod method
 
+function Binary() {
+  let ArrayOfArrays = JSON.parse(JSON.stringify(selectedUsers));
+  let protoPersona = AverageArrayValues(
+    AddArrayValues(ArrayOfArrays),
+    ArrayOfArrays.length
+  );
+  protoPersona = RemoveElementsBelowTreshold(protoPersona, 2);
+
+  return protoPersona;
+} //closes MediaSatisfactionMethod method
+
 function HiperMegaPayanMethod() {
   let ArrayOfArrays = JSON.parse(JSON.stringify(selectedUsers));
   let protoPersona = RemoveElementForAllUserBelowTreshold(ArrayOfArrays, 2);
@@ -275,7 +298,7 @@ function HiperMegaPayanMethod() {
 
 function DisplayRecommendation(recommendation) {
   let recomendationField = document.querySelector(".recommendationText");
-  recomendationField.setAttribute('style', 'white-space: pre;');
+  recomendationField.setAttribute("style", "white-space: pre;");
 
   recomendationField.textContent = recommendation;
 } //closes CalculateRecommendation method
@@ -416,6 +439,7 @@ function RemapData(arrayOfArrays) {
       );
 
       if (arrayOfArrays[i][j] <= 0) arrayOfArrays[i][j] = 0;
+      if (minValue == maxValue) arrayOfArrays[i][j] = 5;
     }
   }
 
@@ -436,7 +460,7 @@ function RelativePercent(array) {
   }
 
   return array;
-}
+} //closes RelativePercent method
 
 function RemoveFromArrayBasedOnArray(array1, array2, condition) {
   for (let i = 0; i < array2.length; i++) {
@@ -482,7 +506,7 @@ function ArmarPizza(persona) {
 
     parche = parche.slice(0, size);
 
-    let recommendation = "Las mejores opciones son: \n" ;
+    let recommendation = "Las mejores opciones son: \n";
 
     for (let i = 0; i < parche.length; i++) {
       recommendation +=
@@ -496,7 +520,24 @@ function ArmarPizza(persona) {
     DisplayRecommendation(recommendation);
     ShowProtopersona(leaderData);
   } else alert("No se ha subido una base de datos");
-} //closes parchar
+} //closes ArmarPizza method
+
+function Mix() {
+  if (UsersDatabase && ProductsDatabase) {
+    mixed = !mixed;
+
+    if (mixed) {
+      ProductsDatabase = JSON.parse(JSON.stringify(OriginalUsersDatabase));
+      UsersDatabase = JSON.parse(JSON.stringify(OriginalProductsDatabase));
+    } else {
+      ProductsDatabase = JSON.parse(JSON.stringify(OriginalProductsDatabase));
+      UsersDatabase = JSON.parse(JSON.stringify(OriginalUsersDatabase));
+    }
+
+    CreateProductDatabase();
+    CreateUserDatabase();
+  }
+} //closes Mix method
 
 function SemejanzaProtopersona__Product(protopersonaData, productoData) {
   //////////////CALCULO DE LA SEMEJANZA/////////////
@@ -530,4 +571,4 @@ function SemejanzaProtopersona__Product(protopersonaData, productoData) {
 
   similitudCoseno = productoPunto / (magnitudA * magnitudB);
   return similitudCoseno;
-}
+} //closes SemejanzaProtopersona__Product method
