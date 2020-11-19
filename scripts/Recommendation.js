@@ -213,8 +213,12 @@ function Recomendar() {
           ArmarPizza(Binary());
 
           break;
-
         case 5:
+          ArmarPizza(BinaryA());
+
+          break;
+
+        case 6:
           ArmarPizza(HiperMegaPayanMethod());
 
           break;
@@ -280,6 +284,16 @@ function Binary() {
     ArrayOfArrays.length
   );
   protoPersona = RemoveElementsBelowTreshold(protoPersona, 2);
+
+  return protoPersona;
+} //closes MediaSatisfactionMethod method
+
+function BinaryA() {
+  let protoPersona = Binary();
+
+  for (let i = 0; i < protoPersona.length; i++) {
+    if (protoPersona[i] > 0) protoPersona[i] = 10;
+  }
 
   return protoPersona;
 } //closes MediaSatisfactionMethod method
@@ -477,8 +491,6 @@ function AddFromArrayBasedOnArray(array1, array2, condition) {
 } //closes RemoveFromArrayBasedOnArray method
 
 function ArmarPizza(persona) {
-  console.log(persona);
-
   if (UsersDatabase && ProductsDatabase) {
     let leaderData = JSON.parse(JSON.stringify(persona));
     leaderData.unshift("Protopersona");
